@@ -1,0 +1,17 @@
+# Rubric: is this plan ready to post and build from?
+
+## Checks
+
+| Check | Evidence | Pass condition | Weight |
+|---|---|---|---|
+| diagnosis-grounded | The candidate plan's stated cause compared with the issue and repro-evidence block; see Diagnosis and grounding | Pass if the diagnosis explains the reproduced behavior without contradicting the evidence. An unconfirmed cause must be presented as a hypothesis with a concrete way to check it. Fail if the plan ignores the repro, contradicts it, or treats an unsupported guess as established. | required |
+| cause-addressed | The proposed change compared with the diagnosis and reproduced failure | Pass if the change addresses the cause supported by the evidence, or first verifies a plausible cause before making a conditional change. Fail if it only hides the symptom, suppresses the error, or bypasses the failing behavior without explaining why that is correct. | required |
+| scope-bounded | The plan's included and excluded work, named files or areas, and approach; see Scope | Pass if the work is one bounded change tied to the issue, with clear limits. Supporting edits and tests are allowed when needed for that change. Fail if unrelated features, cleanup, or broad rewrites are included without a necessary connection to the issue. | required |
+| steps-executable | The plan's named files or areas and implementation approach; see Executability | Pass if a stranger can identify where to start and what behavior to change, with necessary dependencies or investigation steps in a usable order. Exact line numbers and finished code are not required. Fail if the plan only says to investigate, fix, or refactor without actionable direction. | required |
+| tests-decisive | The test plan compared with the repro's trigger, inputs, and observed behavior; see Test plan | Pass if it exercises the reproduced scenario through the affected code and states an observable result that distinguishes the bug from the fix. Include relevant neighboring or failure cases when the proposed change could affect them. Manual checks can pass. Fail if it only says to run tests, checks an unrelated scenario, or could pass while the reported bug remains. | required |
+| uncertainty-honest | Claims in the plan and comment compared with the evidence, risks, unknowns, and any recorded deviations; see Honesty | Pass if claims stay within the evidence and material unknowns are identified with a way to resolve them. A recorded deviation can pass when its reason and revised approach remain supported. Fail if assumptions are presented as proven, unrun tests are claimed to pass, or a known change of approach is concealed. Do not require invented risks or pre-build deviations. | required |
+| thread-and-conventions | The candidate comment compared with thread highlights, repository policies, and the plan; see Comms | Pass if the comment accurately describes the plan, addresses relevant maintainer directions and review limits, and follows conventions that apply to this contribution. Include AI disclosure when explicitly required for comments. Fail if it contradicts a maintainer direction, ignores an explicit review restriction, omits a required disclosure, or misrepresents the plan. Do not invent policies or treat a classmate's claim as blocking in the course repo. | required |
+
+## Verdict rule
+
+Accept only if every required check passes. Any required fail or unclear means reject. Preferred checks, if added, never change the verdict. Grade every check even when an earlier check fails.
