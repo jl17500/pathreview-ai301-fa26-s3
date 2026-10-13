@@ -121,7 +121,7 @@ Run:
 - Existing filename heuristics may still misclassify unusual layouts. Changing them is outside this issue.
 - Inspect test fixtures for environment requirements before adding tests and report any actual blocker.
 - The live branch can change between requests. Record its observed SHA and use deterministic mocked responses for regression tests.
-- Implementation and after-fix tests are complete; see Deviations for the results.
+- Implementation and after-fix tests are complete; see Deviations and the October 13 verification update for the results.
 
 ## Repository test conventions
 
@@ -140,11 +140,15 @@ Implementation followed the revised, posted plan. Only agent/tools/github_tool.p
 
 Test adjustment after the first commit attempt: the mypy pre-commit hook rejected two lines in tests/unit/test_github_tool.py. In the regression and the two detection tests, the real tool output is now JSON-serialized with json.dumps before it is passed to the real RepoAnalyzer.parse, matching parse's declared input type (str | bytes). The tool's data and the parser are still the real ones. The REPO_JSON and TREE_JSON fixtures also gained explicit dict[str, Any] annotations. No type-ignore comments, casts, or disabled checks were used. Production code, behavior, and scope are unchanged.
 
+Python 3.11 verification environment (October 13): the Python 3.14.2 `.venv` cannot run `make typecheck` because mypy aborts on numpy stubs that use 3.12 syntax, while CI and `pyproject.toml` target Python 3.11. I created a separate Python 3.11.9 virtual environment outside the repository (C:/Users/Jing/unit4-check-env), installed `pip install -e ".[dev]"` with no pins or omissions, and ran the Makefile recipes with only `VENV_BIN` overridden. No production-code, test, mypy-configuration, or dependency-declaration change was needed. The original `.venv` is unchanged.
+
 Observation, not a deviation: an HTTP 404 on the tree request goes through the existing execute handler and is reported as "Repository not found", which is that handler's wording for any 404. It is still an unsuccessful ToolResult and is not treated as an empty repository.
 
 ## Verification results
 
-Tested state: base commit 2f4e82f52efbcfcc57d65b3fa5348672163ca088 plus the uncommitted implementation and test changes in the working tree. Nothing is committed. The live reproduction script prints "Local commit: 2f4e82f..." because it reports the base HEAD.
+> **Historical (Unit 3, before the commit).** Everything in this section up to "## Verification update, October 13, 2026" records the Unit 3 state. Statements such as "nothing is committed" and "full-project typechecking remains unverified" were true then and are superseded by the October 13 update below.
+
+[Historical, Unit 3] Tested state: base commit 2f4e82f52efbcfcc57d65b3fa5348672163ca088 plus the uncommitted implementation and test changes in the working tree. Nothing is committed. The live reproduction script prints "Local commit: 2f4e82f..." because it reports the base HEAD.
 
 Regression before the fix: the test failed on `assert "file_structure" in result.data` with the tool result otherwise successful. That failure was shown during the build; it was not saved to a log file.
 
@@ -175,4 +179,28 @@ After the test adjustment (rerun on the working tree, output seen but not saved 
 - Focused pytest: 23 passed in 0.91s.
 - Focused lint: All checks passed.
 - `pre-commit run mypy --files agent/tools/github_tool.py tests/unit/test_github_tool.py`: Passed, exit 0.
-- The mypy hook pass does not replace the full-project result. `make check` still exited 2 at mypy on the numpy stub error described above, and full-project typechecking remains unverified. `make test-unit` (398 passed, 53 xfailed) was run before the test adjustment and has not been rerun since.
+- The mypy hook pass does not replace the full-project result. `make check` still exited 2 at mypy on the numpy stub error described above, and full-project typechecking remained unverified at that time (historical; resolved in the October 13 update). `make test-unit` (398 passed, 53 xfailed) was run before the test adjustment and had not been rerun at that time (rerun on October 13).
+
+## Verification update, October 13, 2026
+
+Tested state: committed SHA f7ec999aa65f55fd774287d57039bda6e0679158 on fix/18-repo-file-structure, with no tracked modifications. This supersedes the Unit 3 "uncommitted" and "typecheck unverified" statements above. Evidence is in test_evidence.md; logs are in ~/unit4-evidence/. All results are local Windows runs, not CI.
+
+Python 3.14.2 `.venv`:
+- `make test-unit`: exit 0, 398 passed, 53 xfailed, 1 warning.
+- `make test-integration`: exit 2. pytest collected 0 tests (exit 5). No integration tests exist, which the assignment expects; this is not a pass.
+- `make lint`: exit 0.
+- `make typecheck`: exit 2. mypy aborted on the numpy stub syntax error before checking repository code (blocked, same as the Unit 3 baseline).
+- Focused regression `tests/unit/test_github_tool.py`: 23 passed.
+- Live unauthenticated reproduction: `file_structure present: True`, `ACTUAL has_tests: True`, `ACTUAL has_ci: True`; target tree SHA 2f4e82f52efbcfcc57d65b3fa5348672163ca088.
+- Seeded markers: none for issue #18 in tests or pyproject.toml.
+
+Python 3.11.9 environment (`make VENV_BIN=C:/Users/Jing/unit4-check-env/Scripts <target>`):
+- `typecheck`: exit 0, no issues in 76 source files.
+- `test-unit`: exit 0, 398 passed, 53 xfailed, 3 warnings.
+- `black --check .`: exit 0, 111 files unchanged.
+
+Frontend (`npm ci`, then `npm test -- --run`, Node v24.16.0, npm 11.13.0): `npm ci` exit 0; tests exit 1 on both a first run and a rerun, 17 passed and 1 failed (`ProfileForm > validates portfolio URL character limit`, timed out in 5000ms). This change touches no frontend files. Frontend code was not edited.
+
+Remaining: CI has not run; the full application workflow was not tested.
+
+Commit message amendment (October 13, 2026, after the verification above): the single branch commit was `f7ec999aa65f55fd774287d57039bda6e0679158`; its message `fix: provide repository file structure for issue 18` lacked the `(agent)` scope that docs/CONTRIBUTING.md asks for. I amended only the message, locally, to `fix(agent): provide repository file structure for issue 18`. The replacement commit is `7ba617d6e5dd3192425ec150b78dc4122d6bbeba`. Both commits have the identical Git tree `10f5190af0ff11d0ebaaedc96c2d75fd51db30cb`, so no file content changed. The tests and checks recorded in this plan ran against `f7ec999aa65f55fd774287d57039bda6e0679158`; they were not rerun for the new commit ID. A local backup branch, backup/18-before-message-amend-f7ec999, points at the old commit. Nothing was pushed.
