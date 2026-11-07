@@ -28,13 +28,13 @@ fill it there):
   update, or "nothing"]
 ```
 
-**Unit 5: @@UNIT5_TITLE@@**
+**Unit 5: Installed the scout late, ran it on the wild, and fixed three rules it exposed**
 
-@@UNIT5_BODY@@
+I skipped the scout in week 5 and found my issues with my AI assistant on the course board instead; on Nov 6 I installed it, updated my fit profile, and wrote three `gh search issues` queries (Python bugs, GitHub Actions work, docs). The first scan failed because `claude -p` blocked every `gh` call on Windows until I allowed read-only gh commands for the PowerShell tool too. The rerun accepted 5 of 5 issues from 0-8 star solo repos, accepted my already-closed eld #2244, and rejected CSET #926 over my own claim. I added a required "Issue still open" check, made the claim check ignore my own claims, and capped the strategy at one issue per repo, logging each change in scan-notes.md.
 
-**Unit 6: @@UNIT6_TITLE@@**
+**Unit 6: Wrote my voice guide, installed the voice guard and repo memory, and fixed Windows PATH**
 
-@@UNIT6_BODY@@
+I caught up on unit 6 on Nov 6: with my AI assistant I wrote my voice guide from my real posted claims (wrong/right pairs, no em dashes or filler words), installed the voice guard hook (its test blocked `gh issue comment --help`, which is the pass), and wrote a CLAUDE.local.md for my eld clone with the DCO rule, the `[workflow]` title style and how the ci.yml jobs connect. The guide caught a real problem before the hook was even in: it flagged that my PR summary opened with background instead of the point, so I swapped the sentences. Once I chose to name Claude in my AI disclosure, my own "don't name the tool" rule would have blocked me, so I rewrote that rule to match what I actually post. The guard starts `claude` from Python, which can't see npm's claude.cmd on Windows, so I added the real claude.exe folder to my user PATH.
 
 **Unit 7: Installed the ship-gate and wrote an eld manifest; it passed only after three fixes**
 
@@ -42,7 +42,7 @@ On Nov 6 I installed the ship-gate on my eld clone and wrote ship-manifest.md wi
 
 **Unit 8: Installed the PR monitor with a playbook built from eld's real response times; chose not to send its draft**
 
-On Nov 6 I wrote my playbook from eld's numbers: in five recent merged PRs from outside the core team, the first response came within 0 to 1.3 days, so I nudge after 4 quiet days for a first review and after 10 for a stalled one. My PR had already merged by the time the monitor first ran, so it drafted a "merged follow-up": a thank-you to Steven6798 plus a sentence asking for #2244 to be closed if it was still open. It couldn't see that #2244 had already closed when the PR merged, so that sentence was wrong. Shankar had also already closed the loop with "Thanks for your contribution", so I didn't post the draft. It showed me the monitor only knows the PR's own state, so I check the linked issue myself before acting on a draft.
+I wrote my playbook from eld's real numbers (first responses in 0-1.3 days across five merged outside PRs), so I nudge after 4 quiet days for a first review and 10 for a stalled one. My PR had already merged when the monitor first ran, so it drafted a "merged follow-up": a thank-you to Steven6798 plus a request to close #2244 if it was still open. It couldn't see that #2244 had closed automatically, and Shankar had already thanked me, so I didn't post it. Since then I check the linked issue myself before acting on a monitor draft.
 
 ---
 
@@ -50,13 +50,18 @@ On Nov 6 I wrote my playbook from eld's numbers: in five recent merged PRs from 
 
 Qualcomm stood out to me because I've used a lot of products with Qualcomm chips in them, and eld is Qualcomm's open-source linker for embedded chips, so contributing there felt like a real project and not a practice repo. #2244 was a task that fit my skill level: one CI workflow file and some JavaScript, a clear expected result (say *why* the build was skipped), and a way to test it myself on a fork without building LLVM. The maintainer who opened it labeled it "good first issue", and nobody had claimed it.
 
-I found it on the course's Issue Selection board. With my AI assistant I went through the whole board in chat (7,744 issues, filtered to 475 with good-first-issue style labels, then 80 with no claim or open PR) and checked the shortlist by hand for claims and linked PRs. I claimed Rez #2092 first and eld #2244 as a backup. When Rez went slowly I switched to eld, which I had already claimed. What I hoped to learn was how a real project's CI decides what to run, and how to get a change reviewed by strangers. @@SCOUT_PARA@@
+I found it on the course's Issue Selection board. With my AI assistant I went through the whole board in chat (7,744 issues, filtered to 475 with good-first-issue style labels, then 80 with no claim or open PR) and checked the shortlist by hand for claims and linked PRs. I claimed Rez #2092 first and eld #2244 as a backup. When Rez went slowly I switched to eld, which I had already claimed. What I hoped to learn was how a real project's CI decides what to run, and how to get a change reviewed by strangers.
+
+I only ran my scout on Nov 6, after I'd already picked eld. Graded against my rubric, eld #2244 came out accept (262 stars, good-first-issue label, no AI ban, one bounded task), which matches why I picked it. It also showed that my rubric had no "still open" check, because the issue was already closed by my merged PR and still passed. CSET #926, my next pick, came out reject, but only because of my own claim comment. Its fresh scan also accepted five issues from repos with 0-8 stars. So the scout's checks hold up on real repo facts (commit recency, claims, AI policy), but it couldn't tell me what mattered most: whether a project is real and active enough to be worth it. A first pass by hand, plus my own judgment, did better there. I've fixed the rules that misfired, and I still read star count and the repo's history myself before trusting an accept.
 
 Claim comment (Oct 28, 2026): https://github.com/qualcomm/eld/issues/2244#issuecomment-6488305156
 
 **Toolkit**
 
-@@WHY_TOOLKIT@@
+- Tool: issue-scout (my search strategy and rubric). I installed it late (Nov 6) and used it to grade my picks after the fact; I found eld itself through an AI-assisted pass over the course board.
+- What it produced: a scan that accepted 5 of 5 small-repo issues, and grades of my picks: eld #2244 accept, CSET #926 reject on "No active claim".
+- Difficulties: on Windows `claude -p` blocked every `gh` call until I allowed read-only gh commands for PowerShell. The rubric accepted a closed issue, rejected my own claimed issue, and couldn't tell a 2-star side project from a real one.
+- What changed: added a required "Issue still open" check, made the claim check ignore claims by jl17500, limited the strategy to one issue per repo with an older-first tie-break, and logged each change in scan-notes.md.
 
 ---
 
@@ -106,13 +111,13 @@ On a README-only pull request, the CI run shows "Classify changed files" passing
 **Reproduction Evidence**
 
 - **Commit showing reproduction:** https://github.com/jl17500/eld/commit/b6a0ee45ac33ca1c0eb46b23b15ba8e5fb72d356 (README-only change, fork PR jl17500/eld#1)
-- **Screenshots/logs:** CI run with no reason shown: https://github.com/jl17500/eld/actions/runs/42167056785 (screenshot eld-2244-before.jpg)
+- **Screenshots/logs:** CI run with no reason shown: https://github.com/jl17500/eld/actions/runs/42167056785 (the Summary page has no explanation box)
 - **My findings:** the skip itself works as designed. The only gap is the explanation, and nothing in any job's log or the summary mentions `skip_build`.
 
 **Toolkit**
 
 - Tool: my AI assistant, which wrote the fork test commands and checked each run with me in the browser, plus GitHub Actions on my fork.
-- What it produced: the fork test plan (a README-only "before" PR, a workflows-only PR with the change, then the same README PR re-run after merging into the fork) and the before run linked above.
+- What it produced: the fork test plan (a README-only "before" PR, a workflows-only PR with the change, then a new empty commit pushed to the same README PR after merging the change into the fork's main) and the before run linked above.
 - Difficulties: Actions was off on the fork, `gh` defaulted to Qualcomm's repo, and the assistant's first screenshot came from a signed-out browser that hides job summaries, so it looked like nothing was there.
 - What changed: I added `--repo jl17500/eld` to every fork command, turned Actions on, and retook all the screenshots from my signed-in browser.
 
@@ -180,11 +185,15 @@ Decided to finish eld first. Wrote the change in ci.yml (one file, +15/-1) and a
 
 **Nov 6, 2026**
 
-Had a second agent re-check the change against the whole repo: no code change was needed. Committed with a DCO sign-off, then amended it from my username to my real name. Ran the three fork tests and took signed-in screenshots. Rebased onto upstream main (0d32ea27), which didn't touch ci.yml. Ran the ship-gate until it passed, rewrote the PR description in my own words (my voice guide flagged nothing), and opened #2425 that afternoon.
+Had a second agent re-check the change against the whole repo: no code change was needed. Committed with a DCO sign-off, then amended it from my username to my real name. Ran the three fork tests and took signed-in screenshots. Rebased onto upstream main (0d32ea27), which didn't touch ci.yml. Ran the ship-gate until it passed, rewrote the PR description in my own words (on the first pass its voice note made me move the point to the first sentence, and the final pass flagged nothing), and opened #2425 that afternoon.
 
 **Nov 6, 2026 (evening)**
 
 Shankar requested reviews from Steven6798 and quic-shaksuma. Steven asked where to see the summary. I answered with the run link and a screenshot. Steven approved after seeing it in Qualcomm's CI, Shankar approved ("Thanks for your contribution!") and added labels, and Steven merged it at 5:29 PM (merge commit 50d9c1b). Issue #2244 closed. I claimed MetOffice/CSET #926 as a next contribution.
+
+**Nov 6, 2026 (night)**
+
+Caught up on the course tools I'd skipped. I installed the PR monitor with a playbook built from eld's response times, ran it, and decided not to send its merged follow-up. I installed the voice guard and a CLAUDE.local.md for eld, and made the Windows PATH fix permanent. I also installed the scout, ran a scan and graded my picks, then fixed the three rubric and strategy problems that run exposed (see the Unit 5 entry).
 
 **Toolkit**
 
@@ -211,7 +220,7 @@ Shankar requested reviews from Steven6798 and quic-shaksuma. Steven asked where 
 **Toolkit**
 
 - Tool: the ship-gate (my manifest plus my unit 4 pr-precheck), run by hand before opening the PR.
-- What it produced: PASS with all six rubric checks (plan-fidelity, description-accurate, repro-evidence, repo-checks, diff-reviewable, repo-standards) and actionlint ok, after a REJECT on the DCO check.
+- What it produced: PASS with all six rubric checks (plan-fidelity, description-accurate, repro-evidence, repo-checks, diff-reviewable, repo-standards) and actionlint ok, after one reject because pr-precheck graded the DCO check "unclear".
 - Difficulties: on Windows the gate couldn't find `claude`, my login had expired, and pr-precheck couldn't confirm the DCO sign-off from one-line commits. It also only checks the description I pass it, so every wording change meant another run.
 - What changed: I put claude.exe on PATH for the session, logged in again, added the full commit message as DCO evidence in test_evidence.md, and reran the gate after each description edit until it passed on the final text.
 
@@ -244,4 +253,4 @@ I promised a report by Nov 3 and missed it, because I was juggling Rez at the sa
 - eld's own `delete-old-workflow-runs.yml`, which already writes a run summary with `core.summary`. I matched its style: https://github.com/qualcomm/eld/blob/main/.github/workflows/delete-old-workflow-runs.yml
 - actionlint 1.7.12, the version eld's workflow-lint.yml pins: https://github.com/rhysd/actionlint/releases/tag/v1.7.12
 - Steven6798's review question on the PR, which showed me that a screenshot answers "where" faster than words: https://github.com/qualcomm/eld/pull/2425#issuecomment-6696526213
-- The course's ship-gate INSTALL.md (the `exited 127` and PATH notes): https://github.com/codepath/ai301-unit7-starter/blob/main/skill/INSTALL.md
+- The course's ship-gate INSTALL.md (its notes on `exited 127` and on how manifest rows run in a fresh shell): https://github.com/codepath/ai301-unit7-starter/blob/main/skill/INSTALL.md
